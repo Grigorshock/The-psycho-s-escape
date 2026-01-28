@@ -1,8 +1,7 @@
 import arcade
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE
 from player import Psycho
-from room import Room
-from wall import Wall
+from room import Room1
 from guard import Guard
 
 
@@ -16,13 +15,7 @@ class The_psycho_escape(arcade.Window):
         self.psycho_list = arcade.SpriteList()
         self.psycho_list.append(self.psycho)
 
-        self.walls = arcade.SpriteList()
-        wall = Wall()
-        self.walls.append(wall)
-
-        self.room = Room()
-        self.room_list = arcade.SpriteList()
-        self.room_list.append(self.room)
+        self.Which_room_now = Room1()
 
         self.guard = Guard()
         self.guard.center_x = 100
@@ -38,12 +31,12 @@ class The_psycho_escape(arcade.Window):
 
         self.physics_engine = arcade.PhysicsEngineSimple(
             self.psycho,
-            self.walls
+            self.Which_room_now.walls
         )
 
         self.guard_physics_engine = arcade.PhysicsEngineSimple(
             self.guard,
-            self.walls
+            self.Which_room_now.walls
         )
 
         self.debug_vision = True
@@ -52,8 +45,8 @@ class The_psycho_escape(arcade.Window):
     def on_draw(self):
         self.clear()
 
-        self.room_list.draw()
-        self.walls.draw()
+        self.Which_room_now.all_textures_room.draw()
+
         self.psycho_list.draw()
         self.guards_list.draw()
 
@@ -64,7 +57,7 @@ class The_psycho_escape(arcade.Window):
             arcade.draw_lrbt_rectangle_filled(left=0, right=SCREEN_WIDTH, bottom=0, top=SCREEN_HEIGHT,
                                               color=(0, 0, 0, 180))
 
-            arcade.draw_text("ВЫ ПРОИГРАЛИ!", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, arcade.color.RED, 72, bold=True,
+            arcade.draw_text("ТЫ ПОМЕР!", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, arcade.color.RED, 72, bold=True,
                              anchor_x="center", anchor_y="center")
 
             arcade.draw_text("Нажмите ESC для выхода", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 80, arcade.color.WHITE,
@@ -78,7 +71,7 @@ class The_psycho_escape(arcade.Window):
         self.psycho.update(delta_time)
 
         self.guard_physics_engine.update()
-        self.guard.update(delta_time, self.psycho, self.walls)
+        self.guard.update(delta_time, self.psycho, self.Which_room_now.walls)
 
         if self.psycho.hp <= 0:
             self.game_over()

@@ -5,7 +5,7 @@ from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 
 class Guard(arcade.Sprite):
     def __init__(self, patrol_points=None):
-        super().__init__("images/Guard_down1.png", 0.5)
+        super().__init__("images/охранник/Guard_down1.png", 0.5)
 
         self.hp = 100
 
@@ -53,25 +53,25 @@ class Guard(arcade.Sprite):
 
     def load_textures(self):
         for i in [1, 2]:
-            texture = arcade.load_texture(f"images/Guard_down{i}.png")
+            texture = arcade.load_texture(f"images/охранник/Guard_down{i}.png")
             self.walk_down_textures.append(texture)
 
         for i in [1, 2]:
-            texture = arcade.load_texture(f"images/Guard_up{i}.png")
+            texture = arcade.load_texture(f"images/охранник/Guard_up{i}.png")
             self.walk_up_textures.append(texture)
 
         for i in [1, 2]:
-            texture = arcade.load_texture(f"images/Guard_right{i}.png")
+            texture = arcade.load_texture(f"images/охранник/Guard_right{i}.png")
             self.walk_right_textures.append(texture)
 
         for i in [1, 2]:
-            texture = arcade.load_texture(f"images/Guard_left{i}.png")
+            texture = arcade.load_texture(f"images/охранник/Guard_left{i}.png")
             self.walk_left_textures.append(texture)
 
-        self.attack_textures["down"] = arcade.load_texture("images/Guard_down_attack.png")
-        self.attack_textures["up"] = arcade.load_texture("images/Guard_up_attack.png")
-        self.attack_textures["right"] = arcade.load_texture("images/Guard_right_attack.png")
-        self.attack_textures["left"] = arcade.load_texture("images/Guard_left_attack.png")
+        self.attack_textures["down"] = arcade.load_texture("images/охранник/Guard_down_attack.png")
+        self.attack_textures["up"] = arcade.load_texture("images/охранник/Guard_up_attack.png")
+        self.attack_textures["right"] = arcade.load_texture("images/охранник/Guard_right_attack.png")
+        self.attack_textures["left"] = arcade.load_texture("images/охранник/Guard_left_attack.png")
 
     def can_see_player(self, player):
         if player is None:
