@@ -1,5 +1,5 @@
 import arcade
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT
+import constants
 
 
 class camera:
@@ -9,14 +9,14 @@ class camera:
 
         self.camera_shake = arcade.camera.grips.ScreenShake2D(
             self.world_camera.view_data,
-            max_amplitude=0.0,
+            max_amplitude=10.0,
             acceleration_duration=0.1,
             falloff_time=0.8,
             shake_frequency=12.0,
         )
 
-
-        self.gui_camera.position = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-
-    def update(self, delta_time):
+    def hit_shake(self):
+        if hasattr(self.camera_shake, "shake"):
+            self.camera_shake.shake()
+    def update(self, delta_time: float):
         self.camera_shake.update(delta_time)

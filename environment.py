@@ -1,12 +1,11 @@
-# комнаты
 import arcade
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 
 class Part_environment(arcade.Sprite):
-    def __init__(self, imag, w, x, y):
-        super().__init__(imag, w, x, y)
+    def __init__(self, imag, scale, x, y):
+        super().__init__(imag, scale, x, y)
 
 class Door(arcade.Sprite):
-    def __init__(self, imag, w, x, y, next_room):
-        super().__init__(imag, w, x, y)
+    def __init__(self, imag, scale, x, y, next_room, spawn_coordinates):
+        super().__init__(imag, scale, x, y)
         self.next_room = next_room
+        self.spawn_coordinates = spawn_coordinates
