@@ -1,11 +1,13 @@
 import arcade
+from Camera import camera
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 
 
 class Psycho(arcade.Sprite):
-    def __init__(self):
+    def __init__(self, camera):
         super().__init__(r"images\игрок_ходьба\идёт_вниз_1.png", 1)
 
+        self.camera = camera
         self.hp = 100
 
         self.center_x = SCREEN_WIDTH // 2
@@ -168,6 +170,9 @@ class Psycho(arcade.Sprite):
     def take_damage(self, damage):
         self.hp -= damage
         print(f"{self.hp} хп")
+
+        self.camera.camera_shake.max_amplitude += 15
+        self.camera.camera_shake.start()
 
         if self.hp <= 0 and not self.is_dead:
             self.die()

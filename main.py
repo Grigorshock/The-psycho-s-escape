@@ -1,8 +1,9 @@
 import arcade
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE
 from player import Psycho
-from room import Room1
+from room import Room1, Room2
 from guard import Guard
+from Camera import camera
 
 
 class The_psycho_escape(arcade.Window):
@@ -11,11 +12,15 @@ class The_psycho_escape(arcade.Window):
         self.game_over_flag = False
 
     def setup(self):
-        self.psycho = Psycho()
+        self.camera = camera()
+
+        self.psycho = Psycho(self.camera)
         self.psycho_list = arcade.SpriteList()
         self.psycho_list.append(self.psycho)
 
-        self.Which_room_now = Room1()
+        self.rooms = [Room1(), Room2()]
+
+        self.Which_room_now = self.rooms[0]
 
         self.guard = Guard()
         self.guard.center_x = 100
@@ -45,13 +50,19 @@ class The_psycho_escape(arcade.Window):
     def on_draw(self):
         self.clear()
 
-        self.Which_room_now.all_textures_room.draw()
+        self.camera.camera_shake.update_camera()
+        self.camera.world_camera.use()
 
+        self.Which_room_now.all_textures_room.draw()
         self.psycho_list.draw()
         self.guards_list.draw()
 
         if self.debug_vision and not self.game_over_flag:
             self.guard.draw_vision_cone()
+
+        self.camera.camera_shake.readjust_camera()
+
+        self.camera.gui_camera.use()
 
         if self.game_over_flag:
             arcade.draw_lrbt_rectangle_filled(left=0, right=SCREEN_WIDTH, bottom=0, top=SCREEN_HEIGHT,
@@ -67,11 +78,31 @@ class The_psycho_escape(arcade.Window):
         if self.game_over_flag:
             return
 
+        if arcade.check_for_collision(self.psycho, self.Which_room_now.door):
+            self.Which_room_now = self.rooms[self.Which_room_now.door.next_room]
+            self.psycho.center_x = SCREEN_WIDTH // 2
+            self.psycho.center_y = SCREEN_HEIGHT // 2
+            self.physics_engine = arcade.PhysicsEngineSimple(
+                self.psycho,
+                self.Which_room_now.walls
+            )
+            self.guard_physics_engine = arcade.PhysicsEngineSimple(
+                self.guard,
+                self.Which_room_now.walls
+            )
+
         self.physics_engine.update()
         self.psycho.update(delta_time)
 
+        self.camera.camera_shake.update(delta_time)
+
         self.guard_physics_engine.update()
         self.guard.update(delta_time, self.psycho, self.Which_room_now.walls)
+
+        self.camera.world_camera.position = (
+            self.psycho.center_x,
+            self.psycho.center_y
+        )
 
         if self.psycho.hp <= 0:
             self.game_over()
@@ -99,7 +130,6 @@ class The_psycho_escape(arcade.Window):
 
         if key == arcade.key.V:
             self.debug_vision = not self.debug_vision
-
 
     def on_key_release(self, key, modifiers):
         if self.game_over_flag:
