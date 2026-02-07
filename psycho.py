@@ -35,7 +35,7 @@ class Psycho(arcade.Sprite):
             self.walk_up_textures.append(arcade.load_texture(f"images/игрок_ходьба/идёт_вверх_{i}.png"))
         for i in range(1, 6):
             self.walk_right_textures.append(arcade.load_texture(f"images/игрок_ходьба/идёт_вправо_{i}.png"))
-            self.walk_left_textures.append(arcade.load_texture(f"images/игрок_ходьба/идёт_вправо_{i}.png"))
+            self.walk_left_textures.append(arcade.load_texture(f"images/игрок_ходьба/идёт_влево_{i}.png"))
         self.stand_texture = arcade.load_texture("images/игрок_ходьба/стоит_вниз.png")
         self.fall_textures = [
             arcade.load_texture("images/игрок_ходьба/упал_1.png"),
@@ -143,6 +143,8 @@ class Psycho(arcade.Sprite):
 
         if self.hp <= 0:
             self.fall_down()
+
+        self.fall_down()
 
         return True
 

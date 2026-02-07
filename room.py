@@ -1,6 +1,6 @@
 import arcade
 import constants
-from environment import Part_environment, Door
+from environment import Part_environment, Door, Phone, FinalDoor
 
 
 class Room1:
@@ -39,7 +39,6 @@ class Room2:
         self.all_textures_room = arcade.SpriteList()
         self.walls = arcade.SpriteList()
 
-
         env = Part_environment("images\\окружение\\пол_к2.png", 0.2, 300, 230)
         self.all_textures_room.append(env)
         env = Part_environment("images\\окружение\\пол_к2.png", 0.2, 300, 360)
@@ -67,9 +66,8 @@ class Room2:
         env = Part_environment("images\\окружение\\стол.png", 0.4, 355, 490)
         self.all_textures_room.append(env)
         self.walls.append(env)
-        env = Part_environment("images\\окружение\\телефон.png", 0.2, 340, 495)
-        self.all_textures_room.append(env)
-        self.walls.append(env)
+        self.phone = Phone(340, 495)
+        self.all_textures_room.append(self.phone)
 
         env = Part_environment("images\\окружение\\стена_к2.png", 0.4, 765, 225)
         self.all_textures_room.append(env)
@@ -147,9 +145,41 @@ class Room2:
         env = Part_environment("images\\окружение\\угл2.png", 0.4, 530, 402)
         self.all_textures_room.append(env)
 
-
         self.door = Door("images\\окружение\\дверь_в_1к.png", 1.3, 380, 120, 0, [380, 205])
         self.all_textures_room.append(self.door)
 
-        self.door2 = Door("images\\окружение\\дверь_финал.png", 0.2, 750, 300, 0, [0, 0])
+        self.door2 = FinalDoor("images\\окружение\\дверь_финал.png", 0.2, 750, 300, 2, [0, 0], [1000, 1000])
         self.all_textures_room.append(self.door2)
+
+
+class Final:
+    def __init__(self):
+        self.all_textures_room = arcade.SpriteList()
+        self.walls = arcade.SpriteList()
+        # Инициализируем с базовыми значениями, затем обновим
+        env = Part_environment("images\финал.jpg", 1, constants.SCREEN_WIDTH // 2 + 250,
+                               constants.SCREEN_HEIGHT // 2 + 100)
+        self.all_textures_room.append(env)
+        self.final_image = env
+
+    def update_final_image(self, window_width, window_height):
+        if self.final_image in self.all_textures_room:
+            self.all_textures_room.remove(self.final_image)
+
+        base_width = 800
+        base_height = 600
+
+        scale_x = window_width / base_width
+        scale_y = window_height / base_height
+
+        scale = max(scale_x, scale_y) * 0.5
+
+        self.final_image = Part_environment(
+            "images\финал.jpg",
+            scale,
+            window_width // 2 - 250,
+            window_height // 2 - 50
+        )
+
+        self.all_textures_room.append(self.final_image)
+        print(f"Финальная картинка обновлена: масштаб {scale:.2f}, разрешение {window_width}x{window_height}")
